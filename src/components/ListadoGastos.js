@@ -10,7 +10,7 @@ Modal } from 'react-native';
 import Gasto from './Gasto';
 
 
-const ListadoGastos = ({gastos,setModal,setGasto}) =>{
+const ListadoGastos = ({gastos,setModal,setGasto,filtro,gastosFiltrados}) =>{
 
 
 
@@ -21,18 +21,30 @@ const ListadoGastos = ({gastos,setModal,setGasto}) =>{
      
       <View style={style.contenedor}>
         <Text style={style.titulo}>Gastos</Text>
-        {gastos.length === 0 ? 
-        <Text style={style.noGastos}>No hay gastos</Text> : 
-        gastos.map (gasto => {
-           return(
-            <Gasto 
-            setModal={setModal}
-           key={gasto.id}
-           gasto={gasto}
-           setGasto={setGasto}
-           />
-           )
-        })}
+
+        { filtro ? gastosFiltrados.map( gasto => (
+                     <Gasto 
+                     setModal={setModal}
+                    key={gasto.id}
+                    gasto={gasto}
+                    setGasto={setGasto}
+                    />
+
+        )) : gastos.map ( gasto => 
+          (
+           <Gasto 
+           setModal={setModal}
+          key={gasto.id}
+          gasto={gasto}
+          setGasto={setGasto}
+          />
+          )
+    )  }
+
+    { gastos.length === 0 || (gastosFiltrados.length === 0 && !!filtro) && (
+      <Text style={style.noGastos}>No hay gastos</Text>
+    )}
+        
       </View>
      
     );

@@ -11,7 +11,7 @@ Modal } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import globalStyle from '../styles';
 
-const FormularioGasto = ({setModal,handlerGasto,setGasto,gasto}) =>{
+const FormularioGasto = ({setModal,handlerGasto,setGasto,gasto,eliminarGasto}) =>{
 
     const [nombre,setNombre] = useState('')
     const [cantidad,setCantidad] = useState('')
@@ -41,17 +41,26 @@ useEffect(()=>{
 
     return (
      <SafeAreaView style={style.contenedor}>
-        <View>
+        <View style={style.contenedorBotones}>
             <Pressable
             onLongPress={() => 
               {
                 setModal(false)
                setGasto({})
               }}
-            style={style.btnCancelar}
+            style={[style.btn , style.btnCancelar ]}
             >
-                <Text style={style.btnCancelarTexto}>Cancelar</Text>
+                <Text style={style.btnTexto}>Cancelar</Text>
             </Pressable>
+
+           {!!id && 
+            <Pressable
+             onLongPress={() => eliminarGasto(id)}
+             style={[style.btn , style.btnEliminar]}
+            >
+                <Text style={style.btnTexto}>Eliminar</Text>
+            </Pressable>
+          }
         </View>
 
         <View style={style.formulario}>
@@ -112,13 +121,27 @@ useEffect(()=>{
          backgroundColor:'#1e40af',
          flex:1
     },
+    contenedorBotones:{
+      flexDirection:'row',
+      justifyContent:'space-between',
+
+    },
+    btn:{
+      padding:10,
+      marginTop:30,
+      marginHorizontal:10,
+      flex:1
+    },
+    btnEliminar:{
+ backgroundColor:'red'
+    },
     btnCancelar:{
       backgroundColor:'#db2777',
       padding:10,
       marginTop:30,
       marginHorizontal:10
     },
-    btnCancelarTexto:{
+    btnTexto:{
     textTransform:'uppercase',
     fontWeight:'bold',
     textAlign:'center',

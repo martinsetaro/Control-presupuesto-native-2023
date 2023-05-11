@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState , useEffect } from 'react';
 import { Text,
 SafeAreaView,
 View,
@@ -9,11 +9,25 @@ Image,
 TextInput,
 Modal } from 'react-native';
 import globalStyle from '../styles';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const NuevoPresupuesto = ({presupuesto,setPresupuesto,handlerNuevoPresupuesto}) =>{
 
 
+useEffect(()=>{
 
+const  obtenerAS = async ()=>{
+ try {
+  const valor = await AsyncStorage.getItem('prueba_as')
+
+ }catch (error) {
+  console.log(error)
+ }
+  
+}
+obtenerAS()
+
+},[])
 
 
 

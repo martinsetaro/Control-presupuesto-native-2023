@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Text,
 Image,
 View,
@@ -8,12 +8,14 @@ StyleSheet,
 Pressable,
 ScrollView,
 Modal } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Header from './src/components/Header';
 import NuevoPresupuesto from './src/components/NuevoPresupuesto';
 import ControlPresupuesto from './src/components/ControlPresupuesto';
 import FormularioGasto from './src/components/FormularioGasto';
 import { generarId } from './src/helpers';
 import ListadoGastos from './src/components/ListadoGastos';
+import Filtro from './src/components/Filtro';
 
 
 const App = () =>{
@@ -23,9 +25,21 @@ const [ presupuesto,setPresupuesto] = useState(0)
 const [gastos,setGastos] = useState([])
 const [modal,setModal] = useState(false)
 const [ gasto,setGasto] = useState({})
+const [ filtro,setFiltro]= useState('')
+const [ gastosFiltrados,setGastosFiltrados] = useState([])
+
+
+useEffect(()=>{
+
+const almacenarAs = async ()=>{
+
+  await AsyncStorage.setItem('prueba_as')
+}
 
 
 
+
+},[])
 
 
   const handlerNuevoPresupuesto = (presupuesto)=>{
@@ -56,13 +70,25 @@ const [ gasto,setGasto] = useState({})
        setGastos([...gastos, gasto])
 
     }
-
- 
-
-   setModal(!modal)
+     
+    setModal(!modal)
   }
 
 
+  const eliminarGasto = id => {
+
+    Alert.alert("¿Deseas eliminar este gasto?","Un gasto eliminado no se puede recuperar",
+    [{ text:'No', style:'cancel'},
+      {text: 'Si , eliminar', onPress : ()=>{
+        const gastosActualizados = gastos.filter( gastoState => gastoState.id != id)
+        setGastos(gastosActualizados)
+        setModal(!modal)
+        setGasto({})
+
+      }}
+    ])
+     console.log("eliminando",id)
+  }
 
 
 
@@ -87,12 +113,24 @@ const [ gasto,setGasto] = useState({})
       
       </View>
 
+      
+
      {isValidPresupuesto && (
+      <>
+      <Filtro
+      setFiltro={setFiltro}
+      filtro={filtro}
+      gastos={gastos}
+      setGastosFiltrados={setGastosFiltrados}
+      />
       <ListadoGastos
       setModal={setModal}
       gastos={gastos}
       setGasto={setGasto}
+      filtro={filtro}
+      gastosFiltrados={gastosFiltrados}
       />
+      </>
      )}
 
 </ScrollView>
@@ -108,6 +146,7 @@ const [ gasto,setGasto] = useState({})
           setModal={setModal}
           setGasto={setGasto}
           gasto={gasto}
+          eliminarGasto={eliminarGasto}
         />
         </Modal>
       )}
@@ -115,6 +154,7 @@ const [ gasto,setGasto] = useState({})
 
       {isValidPresupuesto && (
         <Pressable
+        style={style.pressable}
         onPress={()=>setModal(!modal)}
         >
           <Image 
@@ -139,6 +179,12 @@ const [ gasto,setGasto] = useState({})
 
  },
  imagen:{
+  width:60,
+  height:60,
+  
+ },
+ pressable:{
+ 
   width:60,
   height:60,
   position:'absolute',
