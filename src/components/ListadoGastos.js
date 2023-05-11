@@ -10,7 +10,7 @@ Modal } from 'react-native';
 import Gasto from './Gasto';
 
 
-const ListadoGastos = ({gastos}) =>{
+const ListadoGastos = ({gastos,setModal,setGasto}) =>{
 
 
 
@@ -26,8 +26,11 @@ const ListadoGastos = ({gastos}) =>{
         gastos.map (gasto => {
            return(
             <Gasto 
+            setModal={setModal}
            key={gasto.id}
-           gasto={gasto}/>
+           gasto={gasto}
+           setGasto={setGasto}
+           />
            )
         })}
       </View>

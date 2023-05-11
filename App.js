@@ -22,6 +22,7 @@ const[ isValidPresupuesto , setIsValidPresupuesto] = useState(false)
 const [ presupuesto,setPresupuesto] = useState(0)
 const [gastos,setGastos] = useState([])
 const [modal,setModal] = useState(false)
+const [ gasto,setGasto] = useState({})
 
 
 
@@ -37,15 +38,27 @@ const [modal,setModal] = useState(false)
 
   const handlerGasto = gasto => {
 
-    if(Object.values(gasto).includes('')){
+    if([gasto.nombre,gasto.cantidad,gasto.categoria].includes('')){
       Alert.alert("Error", "Todos los campos son obligatorios")
       return;
     }
 
-   gasto.id = generarId();
-   gasto.fecha= Date.now();
-    
-   setGastos([...gastos, gasto])
+
+
+    if(gasto.id){
+      const gastosActualizados = gastos.map( gastoState => gastoState.id === gasto.id ? gasto : gastoState)
+      setGastos(gastosActualizados)
+
+    }else {
+
+       gasto.id = generarId();
+       gasto.fecha= Date.now();
+       setGastos([...gastos, gasto])
+
+    }
+
+ 
+
    setModal(!modal)
   }
 
@@ -76,7 +89,9 @@ const [modal,setModal] = useState(false)
 
      {isValidPresupuesto && (
       <ListadoGastos
+      setModal={setModal}
       gastos={gastos}
+      setGasto={setGasto}
       />
      )}
 
@@ -91,6 +106,8 @@ const [modal,setModal] = useState(false)
         <FormularioGasto
           handlerGasto={handlerGasto}
           setModal={setModal}
+          setGasto={setGasto}
+          gasto={gasto}
         />
         </Modal>
       )}

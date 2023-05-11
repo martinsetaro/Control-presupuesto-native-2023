@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState , useEffect } from 'react';
 import { Text,
 SafeAreaView,
 View,
@@ -11,14 +11,27 @@ Modal } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import globalStyle from '../styles';
 
-const FormularioGasto = ({setModal,handlerGasto}) =>{
+const FormularioGasto = ({setModal,handlerGasto,setGasto,gasto}) =>{
 
     const [nombre,setNombre] = useState('')
     const [cantidad,setCantidad] = useState('')
     const [categoria,setCategoria] = useState('')
+    const [ id,setId] = useState('')
+    const [ fecha , setFecha] = useState('')
 
 
+useEffect(()=>{
 
+  if(gasto?.nombre){
+    setNombre(gasto.nombre)
+    setCantidad(gasto.cantidad)
+    setCategoria(gasto.categoria)
+    setId(gasto.id)
+    setFecha(gasto.fecha)
+  }
+
+
+},[gasto])
 
 
 
@@ -30,7 +43,11 @@ const FormularioGasto = ({setModal,handlerGasto}) =>{
      <SafeAreaView style={style.contenedor}>
         <View>
             <Pressable
-            onLongPress={() => setModal(false)}
+            onLongPress={() => 
+              {
+                setModal(false)
+               setGasto({})
+              }}
             style={style.btnCancelar}
             >
                 <Text style={style.btnCancelarTexto}>Cancelar</Text>
@@ -38,7 +55,7 @@ const FormularioGasto = ({setModal,handlerGasto}) =>{
         </View>
 
         <View style={style.formulario}>
-            <Text style={style.titulo}>Nuevo Gasto</Text>
+            <Text style={style.titulo}>{gasto?.nombre ? "Editar gasto" : "Nuevo Gasto"}</Text>
         
         <View style={style.campo}>
             <Text style={style.label}>Nombre gasto</Text>
@@ -79,9 +96,9 @@ const FormularioGasto = ({setModal,handlerGasto}) =>{
         </View>
 
         <Pressable
-        onPress={()=> handlerGasto({nombre,cantidad,categoria})}
+        onPress={()=> handlerGasto({nombre,cantidad,categoria,id,fecha})}
         style={style.submitBtn}>
-            <Text style={style.submitBtnTexto}>Agregar gasto</Text>
+            <Text style={style.submitBtnTexto}>{gasto?.nombre ? "Guardar cambios" : "Agregar gasto"}</Text>
         </Pressable>
         
       </View>

@@ -10,7 +10,7 @@ Modal } from 'react-native';
 import globalStyle from '../styles';
 import { formatearCantidad , formatearFecha } from '../helpers';
 
-const Gasto = ({gasto}) =>{
+const Gasto = ({gasto,setModal,setGasto}) =>{
 
   const iconos = {
     ahorro: require('../img/icono_ahorro.png'),
@@ -26,9 +26,18 @@ const Gasto = ({gasto}) =>{
 const {nombre,cantidad,categoria,id,fecha} = gasto
 
 
+const handleAcciones = ()=>{
+  setModal(true)
+  setGasto(gasto)
+}
+
+
 
     return (
     
+      <Pressable
+      onLongPress={handleAcciones}
+      >
       <View style={style.contenedor}>
 
           <View style={style.contenido}>
@@ -50,7 +59,7 @@ const {nombre,cantidad,categoria,id,fecha} = gasto
           </View>
         
       </View>
-    
+    </Pressable>
     );
   }
 
