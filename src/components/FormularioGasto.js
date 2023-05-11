@@ -65,6 +65,7 @@ const FormularioGasto = ({setModal,handlerGasto}) =>{
             selectedValue={categoria}
             onValueChange={(itemValue)=> setCategoria(itemValue)}
             style={style.input}
+          
             >
               <Picker.Item label="--Seleccione--" value=""/>
               <Picker.Item label="Ahorro" value="ahorro"/>

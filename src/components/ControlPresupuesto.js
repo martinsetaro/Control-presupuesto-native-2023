@@ -10,7 +10,11 @@ Modal } from 'react-native';
 import globalStyle from '../styles';
 import { formatearCantidad } from '../helpers';
 
+
+
 const ControlPresupuesto = ({presupuesto,gastos}) =>{
+
+  
 
 
 
