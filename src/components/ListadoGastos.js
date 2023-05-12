@@ -1,12 +1,8 @@
 import React, { Component } from 'react';
 import { Text,
-SafeAreaView,
 View,
-ImageBackground,
 StyleSheet,
-Pressable,
-Image,
-Modal } from 'react-native';
+ } from 'react-native';
 import Gasto from './Gasto';
 
 
@@ -41,7 +37,7 @@ const ListadoGastos = ({gastos,setModal,setGasto,filtro,gastosFiltrados}) =>{
           )
     )  }
 
-    { gastos.length === 0 || (gastosFiltrados.length === 0 && !!filtro) && (
+    { (gastos.length === 0 || (gastosFiltrados.length === 0 && !!filtro)) && (
       <Text style={style.noGastos}>No hay gastos</Text>
     )}
         

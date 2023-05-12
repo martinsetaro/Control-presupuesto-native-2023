@@ -1,19 +1,16 @@
 import React, { useState , useEffect } from 'react';
 import { Text,
-SafeAreaView,
 View,
-ImageBackground,
 StyleSheet,
 Pressable,
-Image,
-Modal } from 'react-native';
+} from 'react-native';
 import globalStyle from '../styles';
 import { formatearCantidad } from '../helpers';
 import CircularProgress from 'react-native-circular-progress-indicator';
 
 
 
-const ControlPresupuesto = ({presupuesto,gastos}) =>{
+const ControlPresupuesto = ({presupuesto,gastos,resetearApp}) =>{
 
   
 
@@ -55,6 +52,12 @@ const ControlPresupuesto = ({presupuesto,gastos}) =>{
 
         </View>
         <View style={style.contenedorTexto}>
+
+          <Pressable 
+          onLongPress={() => resetearApp()}
+          style={style.boton}>
+            <Text style={style.textoBoton}>Reiniciar App</Text>
+          </Pressable>
             <Text style={style.valor}>
                 <Text style={style.label}>Presupuesto: {''}</Text>
                 {formatearCantidad(presupuesto)}
@@ -81,10 +84,6 @@ const ControlPresupuesto = ({presupuesto,gastos}) =>{
    
     alignItems:'center'
   },
-  imagen:{
-    width:250,
-height:250  
-},
 contenedorTexto:{
    marginTop:50,
 
@@ -98,6 +97,18 @@ label:{
   fontWeight:'700',
   color:'#3b82f6'
 
+},
+boton:{
+ backgroundColor:'#db2777',
+ padding:10,
+ marginBottom:40,
+ borderRadius:5
+},
+textoBoton:{
+textAlign:'center',
+color:'#fff',
+fontWeight:'bold',
+textTransform:'uppercase'
 }
   })
 export default ControlPresupuesto;

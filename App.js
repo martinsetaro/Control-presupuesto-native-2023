@@ -29,17 +29,82 @@ const [ filtro,setFiltro]= useState('')
 const [ gastosFiltrados,setGastosFiltrados] = useState([])
 
 
-useEffect(()=>{
+ useEffect(()=>{
 
-const almacenarAs = async ()=>{
+const obtenerPresupuestoStorage = async ()=>{
+try { // el doble simbolo ? hace una comprobacion
+  const presupuestoStorage = await AsyncStorage.getItem
+  ('planificador_presupuesto') ?? 0 //si no hay nada le asigna un valor ej: 0
 
-  await AsyncStorage.setItem('prueba_as')
+if(presupuestoStorage > 0 ){
+  setPresupuesto(presupuestoStorage)
+  setIsValidPresupuesto(true)
 }
 
 
+} catch (Error) {
+  console.log(Error)
+}
+}
+obtenerPresupuestoStorage();
+ },[])
+
+
+
+useEffect(()=>{
+if(isValidPresupuesto){
+const guardarPresupuestoStorage = async ()=>{
+try {
+  await AsyncStorage.setItem('planificador_presupuesto', presupuesto)
+
+} catch (Error) {
+   console.log(Error)
+}
+
+}
+
+guardarPresupuestoStorage();
+}
+},[isValidPresupuesto])
+
+useEffect(()=>{
+
+  const obtenerGastosStorage = async () => {
+   
+    try {
+
+      const gastosStorage = await AsyncStorage.getItem('planificador_gastos')
+
+      setGastos( gastosStorage ? JSON.parse(gastosStorage) : [])
+      
+    } catch (error) {
+      console.log(error)
+    }
+
+
+  }
+obtenerGastosStorage();
 
 
 },[])
+
+
+useEffect(()=>{
+const guardarGastosStorage = async () => {
+try {
+
+    await AsyncStorage.setItem('planificador_gastos',JSON.stringify(gastos))
+    
+  } catch (Error) {
+    console.log(Error)
+  }
+
+}
+
+guardarGastosStorage()
+
+},[gastos]);
+
 
 
   const handlerNuevoPresupuesto = (presupuesto)=>{
@@ -91,7 +156,24 @@ const almacenarAs = async ()=>{
   }
 
 
+const resetearApp = ()=>{
+  Alert.alert(
+    "¿Deseas resetear la app?",
+    "Essto eliminará presupuesto y gastos",
+    [{ text:"No", style:'cancel'},{text:"Si Eliminar", onPress : async ()=>{
+ try {
+  await AsyncStorage.clear()
 
+  setIsValidPresupuesto(false)
+  setGastos([])
+  setPresupuesto(0)
+
+ } catch (error) {
+  console.log(error)
+ }
+    }}]
+  )
+}
 
 
     return (
@@ -105,6 +187,7 @@ const almacenarAs = async ()=>{
           <ControlPresupuesto
           gastos={gastos}
           presupuesto={presupuesto}
+          resetearApp={resetearApp}
           />):
           (<NuevoPresupuesto
              presupuesto={presupuesto}
